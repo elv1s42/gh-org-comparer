@@ -1,17 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Octokit;
 
 namespace OrgComparer
 {
-    public class Core
+    public static class Core
     {
-        public static async Task<bool> GetOrgs(params string [] orgs)
+        public static List<User> GetOrgs(this GitHubClient githubClient, params string [] orgs)
         {
-            var success = true;
-
-            var githubClient = new GitHubClient(new ProductHeaderValue("my-cool-app"));
+            var list = new List<User>();
 
             foreach (var org in orgs)
             {
@@ -21,13 +19,15 @@ namespace OrgComparer
                     In = new[] {UserInQualifier.Username}
                 };
 
-                var result = await githubClient.Search.SearchUsers(request);
+                var r = githubClient.Search.SearchUsers(request);
+                r.Wait();
+
+                var result = r.Result;
 
                 var count = result.TotalCount;
                 if (count == 0)
                 {
                     Console.WriteLine($"Org '{org}' was not found, skipping this org name");
-                    success = false;
                 }
                 else
                 {
@@ -37,15 +37,32 @@ namespace OrgComparer
                     }
                     else if (count > 1)
                     {
-                        Console.WriteLine($"Result for '{org}' search has {count} results, taking first result");
-                        success = false;
+                        Console.WriteLine($"Result for '{org}' search has {count} organizations, taking first one");
                     }
                     
                     var user = result.Items.First();
+                    list.Add(user);
                     UserHelper.WriteUserInfo(user);
                 }
             }
-            return success;
+
+            if (list.Count < orgs.Length)
+            {
+                Console.WriteLine("Warning! Not all orgs were found.");
+            }
+
+            return list;
+        }
+
+
+
+        public static IReadOnlyList<Repository> GetPublicRepos(this GitHubClient client, User user)
+        {
+            var r = client.Repository.GetAllForOrg(user.Login);
+            r.Wait();
+
+            var list = r.Result;
+            return list;
         }
     }
 }

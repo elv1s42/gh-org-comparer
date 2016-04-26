@@ -1,4 +1,5 @@
 ﻿using System;
+using Octokit;
 using OrgComparer;
 
 namespace OrgComparerConsole
@@ -7,18 +8,26 @@ namespace OrgComparerConsole
     {
         public static void Main(string[] args)
         {
-            var res = string.Empty;
-            while (!res.Equals("y") && !res.Equals("Y"))
+            var input = "n";
+            while (input.Equals("n") || input.Equals("N"))
             {
-                //Core.GetOrgs("Accenture", "Luxoft", "mailru", "yandex", "Cocaine", "Artezio", "Epam")
-                //    .Wait();
-                var success = Core.GetOrgs("EPAM Systems");
-                success.Wait();
+                var githubClient = new GitHubClient(new ProductHeaderValue("my-cool-app"));
 
-                Console.WriteLine($"Result: {success.Result}");
+                //var list = Core.GetOrgs("Accenture", "Luxoft", "mailru", "yandex", "Cocaine", "Artezio", "Epam");
+
+                var list = githubClient.GetOrgs("EPAM Systems");
+
+                Console.WriteLine($"Returned: {list.Count}");
+
+                foreach (var org in list)
+                {
+                    var repos = githubClient.GetPublicRepos(org);
+                    Console.WriteLine($"Repos count: {repos.Count}");
+
+                }
 
                 Console.WriteLine("Exit? (y/n)");
-                res = Console.ReadLine() ?? "n";
+                input = Console.ReadLine() ?? "y";
             }
         }
     }
