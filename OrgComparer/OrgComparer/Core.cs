@@ -40,15 +40,9 @@ namespace OrgComparer
                         Console.WriteLine($"Result for '{org}' search has {count} results, taking first result");
                         success = false;
                     }
-
-                    foreach (var item in result.Items)
-                    {
-                        UserHelper.WriteUserInfo(item);
-                    }
-
+                    
                     var user = result.Items.First();
-
-                    //UserHelper.WriteUserInfo(user);
+                    UserHelper.WriteUserInfo(user);
                 }
             }
             return success;

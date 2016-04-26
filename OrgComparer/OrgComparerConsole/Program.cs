@@ -12,8 +12,11 @@ namespace OrgComparerConsole
             {
                 //Core.GetOrgs("Accenture", "Luxoft", "mailru", "yandex", "Cocaine", "Artezio", "Epam")
                 //    .Wait();
-                Core.GetOrgs("EPAM Systems")
-                    .Wait();
+                var success = Core.GetOrgs("EPAM Systems");
+                success.Wait();
+
+                Console.WriteLine($"Result: {success.Result}");
+
                 Console.WriteLine("Exit? (y/n)");
                 res = Console.ReadLine() ?? "n";
             }
