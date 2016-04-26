@@ -7,7 +7,7 @@ namespace OrgComparer
 {
     public static class Core
     {
-        public static List<User> GetOrgs(this GitHubClient githubClient, params string [] orgs)
+        public static List<User> GetOrgsBySearch(this GitHubClient githubClient, params string [] orgs)
         {
             var list = new List<User>();
 
@@ -20,6 +20,8 @@ namespace OrgComparer
                 };
 
                 var r = githubClient.Search.SearchUsers(request);
+                //TODO: try it!
+                //var r = githubClient.User.Get(org);
                 r.Wait();
 
                 var result = r.Result;

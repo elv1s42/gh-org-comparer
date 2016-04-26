@@ -18,9 +18,9 @@ namespace OrgComparerConsole
 
                 var githubClient = new GitHubClient(new ProductHeaderValue("my-cool-app"));
 
-                //var list = Core.GetOrgs("Accenture", "Luxoft", "mailru", "yandex", "Cocaine", "Artezio", "Epam");
+                var list = githubClient.GetOrgsBySearch("Accenture", "Luxoft", "mailru", "yandex", "Cocaine", "Artezio", "Epam");
+                //var list = githubClient.GetOrgs("EPAM Systems");
 
-                var list = githubClient.GetOrgs("EPAM Systems");
                 Console.WriteLine($"Returned: {list.Count}");
                 
                 foreach (var org in list)
@@ -28,7 +28,7 @@ namespace OrgComparerConsole
                     UserHelper.WriteUserInfo(org);
 
                     var repos = githubClient.GetPublicRepos(org).ToList();
-                    Console.WriteLine($"Repos count: {repos.Count}");
+                    Console.WriteLine($"    Repos count: {repos.Count}");
 
                     organizations.Add(new Org {Organization = org, Repos = repos});
 
@@ -38,7 +38,14 @@ namespace OrgComparerConsole
                     }
                 }
 
-
+                var lastUpdate = DateTime.Now.AddYears(-1);
+                foreach (var organization in organizations)
+                {
+                    Console.WriteLine($"---- Login: {organization.Organization.Login}");
+                    Console.WriteLine($"Count: {organization.GetNewReposNumber(lastUpdate)}");
+                    Console.WriteLine($"Forks: {organization.GetNewReposForks(lastUpdate)}");
+                    Console.WriteLine($"Stars: {organization.GetNewReposStars(lastUpdate)}");
+                }
 
                 Console.WriteLine("Exit? (y/n)");
                 input = Console.ReadLine() ?? "y";
