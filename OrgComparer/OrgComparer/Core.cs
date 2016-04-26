@@ -42,7 +42,6 @@ namespace OrgComparer
                     
                     var user = result.Items.First();
                     list.Add(user);
-                    UserHelper.WriteUserInfo(user);
                 }
             }
 
@@ -53,8 +52,6 @@ namespace OrgComparer
 
             return list;
         }
-
-
 
         public static IReadOnlyList<Repository> GetPublicRepos(this GitHubClient client, User user)
         {
