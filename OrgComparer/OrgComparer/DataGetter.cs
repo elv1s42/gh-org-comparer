@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using Newtonsoft.Json.Linq;
 
@@ -18,7 +19,6 @@ namespace OrgComparer
                     r.Wait();
 
                     json = r.Result;
-                    Console.WriteLine(json);
                 }
                 catch (Exception ex)
                 {
@@ -32,18 +32,20 @@ namespace OrgComparer
         public static void GetOrgs()
         {
             var jsonString = LoadJsonString("https://api.github.com/search/users?q=epam+type:org");
-            Console.WriteLine(jsonString);
+            var jsonResponse = JObject.Parse(jsonString);
 
+            Console.WriteLine($"json.HasValues: {jsonResponse.HasValues}");
+            Console.WriteLine($"json.Path: {jsonResponse.Path}");
+            Console.WriteLine($"count: {jsonResponse.GetValue("total_count")}");
 
-            Console.WriteLine("_________________");
+            var orgs = jsonResponse["items"].Children().ToList().Select(jT => JObject.Parse(jT.ToString()));
 
+            foreach (var org in orgs)
+            {
+                var jsonOrg = JObject.Parse(org.ToString());
+                Console.WriteLine($"Home url: {jsonOrg.GetValue("html_url")}");
 
-            var json = JObject.Parse(jsonString);
-
-
-            Console.WriteLine($"json.HasValues: {json.HasValues}");
-            Console.WriteLine($"json.Path: {json.Path}");
-            Console.WriteLine($"count: {json.GetValue("total_count")}");
+            }
 
 
         }
