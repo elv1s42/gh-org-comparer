@@ -12,16 +12,19 @@ namespace OrgComparerConsole
     {
         public static void Main(string[] args)
         {
-            var input = "n";
-            while (input.Equals("n") || input.Equals("N"))
+            var input = "y";
+            while (!input.Equals("n") && !input.Equals("N"))
             {
                 var organizations = new List<Org>();
 
                 var githubClient = new GitHubClient(new ProductHeaderValue("my-cool-app"));
 
-                //var list = githubClient.GetOrgsBySearch("Accenture", "Luxoft", "mailru", "yandex", "Cocaine", "Artezio", "Epam");
-                var list = githubClient.GetOrgsBySearch("EPAM Systems");
+                var list = githubClient.GetOrgsBySearch("Accenture", "Luxoft", "mailru", "yandex", "Cocaine", "Artezio", "Epam");
+                //var list = githubClient.GetOrgsBySearch("EPAM Systems");
+
                 //var list = githubClient.GetOrgsByLogin("epam");
+
+                //var list = githubClient.GetOrgsCustom();
 
                 Console.WriteLine($"Returned: {list.Count}");
                 
@@ -47,7 +50,7 @@ namespace OrgComparerConsole
                     StatInfoHelper.WriteRepoInfo(organization.GetStats(lastUpdate));
                 }
 
-                Console.WriteLine("Exit? (y/n)");
+                Console.WriteLine("Continue? (y/n)");
                 input = Console.ReadLine() ?? "y";
             }
         }

@@ -11,16 +11,18 @@ namespace OrgComparer
         {
             var list = new List<User>();
             
-            var request = new SearchUsersRequest("")
+            var request = new SearchUsersRequest("1234")
             {
                 AccountType = AccountSearchType.Org,
-                In = new[] { UserInQualifier.Username }
+                In = new[] { UserInQualifier.Email }
             };
 
             var r = githubClient.Search.SearchUsers(request);
             r.Wait();
 
             var result = r.Result;
+
+            Console.WriteLine($"Count: {result.TotalCount}");
             
             list.AddRange(result.Items);
             return list;
