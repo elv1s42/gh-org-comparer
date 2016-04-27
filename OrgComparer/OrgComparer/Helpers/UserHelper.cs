@@ -1,7 +1,7 @@
 ﻿using System;
 using Octokit;
 
-namespace OrgComparer
+namespace OrgComparer.Helpers
 {
     public static class UserHelper
     {

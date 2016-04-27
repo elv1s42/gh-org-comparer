@@ -46,9 +46,11 @@
   <ItemGroup>
     <Compile Include="Core.cs" />
     <Compile Include="CustomClasses\Org.cs" />
+    <Compile Include="CustomClasses\StatInfo.cs" />
+    <Compile Include="Helpers\StatInfoHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RepoHelper.cs" />
-    <Compile Include="UserHelper.cs" />
+    <Compile Include="Helpers\RepoHelper.cs" />
+    <Compile Include="Helpers\UserHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

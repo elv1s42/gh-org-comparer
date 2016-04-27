@@ -4,6 +4,7 @@ using System.Linq;
 using Octokit;
 using OrgComparer;
 using OrgComparer.CustomClasses;
+using OrgComparer.Helpers;
 
 namespace OrgComparerConsole
 {
@@ -18,8 +19,9 @@ namespace OrgComparerConsole
 
                 var githubClient = new GitHubClient(new ProductHeaderValue("my-cool-app"));
 
-                var list = githubClient.GetOrgsBySearch("Accenture", "Luxoft", "mailru", "yandex", "Cocaine", "Artezio", "Epam");
-                //var list = githubClient.GetOrgs("EPAM Systems");
+                //var list = githubClient.GetOrgsBySearch("Accenture", "Luxoft", "mailru", "yandex", "Cocaine", "Artezio", "Epam");
+                var list = githubClient.GetOrgsBySearch("EPAM Systems");
+                //var list = githubClient.GetOrgsByLogin("epam");
 
                 Console.WriteLine($"Returned: {list.Count}");
                 
@@ -27,7 +29,7 @@ namespace OrgComparerConsole
                 {
                     UserHelper.WriteUserInfo(org);
 
-                    var repos = githubClient.GetPublicRepos(org).ToList();
+                    var repos = githubClient.GetPublicSourceRepos(org).ToList();
                     Console.WriteLine($"    Repos count: {repos.Count}");
 
                     organizations.Add(new Org {Organization = org, Repos = repos});
@@ -37,14 +39,12 @@ namespace OrgComparerConsole
                         RepoHelper.WriteRepoInfo(repo);
                     }
                 }
-
-                var lastUpdate = DateTime.Now.AddYears(-1);
+                
+                //var lastUpdate = DateTime.Now.AddYears(-1);
+                var lastUpdate = DateTime.Now.AddMonths(-6);
                 foreach (var organization in organizations)
                 {
-                    Console.WriteLine($"---- Login: {organization.Organization.Login}");
-                    Console.WriteLine($"Count: {organization.GetNewReposNumber(lastUpdate)}");
-                    Console.WriteLine($"Forks: {organization.GetNewReposForks(lastUpdate)}");
-                    Console.WriteLine($"Stars: {organization.GetNewReposStars(lastUpdate)}");
+                    StatInfoHelper.WriteRepoInfo(organization.GetStats(lastUpdate));
                 }
 
                 Console.WriteLine("Exit? (y/n)");

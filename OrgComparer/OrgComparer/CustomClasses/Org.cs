@@ -29,5 +29,17 @@ namespace OrgComparer.CustomClasses
         {
             return GetNewRepos(lastUpdateMin).Sum(repo => repo.ForksCount);
         }
+
+        public StatInfo GetStats(DateTime lastUpdateMin)
+        {
+            return new StatInfo
+            {
+                Login = Organization.Login,
+                LastRepoUpdateTime = lastUpdateMin,
+                ReposCount = GetNewReposNumber(lastUpdateMin),
+                ForksCount = GetNewReposForks(lastUpdateMin),
+                StarsCount = GetNewReposStars(lastUpdateMin),
+            };
+        }
     }
 }
