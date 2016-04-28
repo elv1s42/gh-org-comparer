@@ -45,6 +45,13 @@ namespace OrgComparer
                 var jsonOrg = JObject.Parse(org.ToString());
                 Console.WriteLine($"Home url: {jsonOrg.GetValue("html_url")}");
 
+                var orgReposUrl = jsonOrg.GetValue("repos_url").ToString();
+                var jsonReposString = LoadJsonString(orgReposUrl);
+                var jsonReposResponse = JObject.Parse(jsonReposString);
+                var repos = jsonReposResponse.Children().ToList().Select(jT => JObject.Parse(jT.ToString()));
+
+
+
             }
 
 
