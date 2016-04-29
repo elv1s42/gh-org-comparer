@@ -8,7 +8,7 @@ namespace ComparerConsole
         {
             public const string ActionScript = "ActionScript";
             public const string C = "C";
-            public const string CSharp = "C#";
+            public const string CSharp = "csharp";
             public const string Cpp = "C++";
             public const string Clojure = "Clojure";
             public const string CoffeeScript = "CoffeeScript";

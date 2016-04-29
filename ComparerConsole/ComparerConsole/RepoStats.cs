@@ -8,6 +8,8 @@ namespace ComparerConsole
         public DateTime QueryDate;
 
         public string RepoUrl;
+        public int RepoId;
+
         public int Stars;
         public int Forks;
         public int Watchs;

@@ -9,7 +9,7 @@ namespace ComparerConsole
             var input = "y";
             while (!input.Equals("n") && !input.Equals("N"))
             {
-                DataGetter.GetOrgs();
+                DataGetter.GetTop1000("csharp");
 
                 Console.WriteLine("Continue? (y/n)");
                 input = Console.ReadLine() ?? "y";

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using Newtonsoft.Json.Linq;
@@ -7,7 +8,7 @@ namespace ComparerConsole
 {
     public class DataGetter
     {
-        public static string LoadJsonString(string url)
+        private static string LoadJsonString(string url)
         {
             var json = "";
             using (var wc = new WebClient())
@@ -27,6 +28,11 @@ namespace ComparerConsole
                 }
             }
             return json;
+        }
+
+        private static JObject GetJObject(string url)
+        {
+            return JObject.Parse(LoadJsonString(url));
         }
 
         public static void GetOrgs()
@@ -54,6 +60,32 @@ namespace ComparerConsole
             }
         }
 
-        public static 
+        public static string GetSearchRepoString(string language, int page, int perPage)
+        {
+            return
+                $"https://api.github.com/search/repositories?q=+language:{language}&sort=stars&order=desc&page={page}&per_page={perPage}";
+        }
+
+        public static List<RepoStats> GetTop1000(string language)
+        {
+            var list = new List<RepoStats>();
+            for (var i = 1; i <= 10; i++)
+            {
+               var  jObj = GetJObject(GetSearchRepoString(language, i, 100));
+
+                var totalCount = int.Parse(jObj.GetValue("total_count").ToString());
+                Console.WriteLine($"count: {totalCount}");
+
+                var jRepos = jObj["items"].Children().ToList().Select(jT => JObject.Parse(jT.ToString()));
+                foreach (var jRepo in jRepos)
+                {
+                    
+                }
+
+            }
+
+
+            return list;
+        }
     }
 }
