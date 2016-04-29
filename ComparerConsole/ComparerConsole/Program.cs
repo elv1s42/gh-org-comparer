@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace ComparerConsole
 {
@@ -9,8 +11,15 @@ namespace ComparerConsole
             var input = "y";
             while (!input.Equals("n") && !input.Equals("N"))
             {
-                DataGetter.GetTop1000("csharp");
+                var lang = "csharp";
+                var list = DataGetter.GetTop1000(lang);
 
+                list.WriteToConsole(1);
+
+                var json = JsonConvert.SerializeObject(list, Formatting.Indented);
+
+                File.WriteAllText(Path.Combine(DataGetter.GetPath(), $"{lang}.json"), json);
+                
                 Console.WriteLine("Continue? (y/n)");
                 input = Console.ReadLine() ?? "y";
             }

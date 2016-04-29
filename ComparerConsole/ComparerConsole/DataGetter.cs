@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using Newtonsoft.Json.Linq;
 
 namespace ComparerConsole
@@ -71,21 +73,47 @@ namespace ComparerConsole
             var list = new List<RepoStats>();
             for (var i = 1; i <= 10; i++)
             {
-               var  jObj = GetJObject(GetSearchRepoString(language, i, 100));
-
-                var totalCount = int.Parse(jObj.GetValue("total_count").ToString());
-                Console.WriteLine($"count: {totalCount}");
-
+                Console.Write($"({i}) Getting 100 repos... ");
+                
+                var  jObj = GetJObject(GetSearchRepoString(language, i, 100));
                 var jRepos = jObj["items"].Children().ToList().Select(jT => JObject.Parse(jT.ToString()));
+
+                var j = 0;
+
                 foreach (var jRepo in jRepos)
                 {
-                    
+                    j++;
+                    var position = (i - 1) * 100 + j;
+
+                    var repoStats = new RepoStats
+                    {
+                        RepoUrl = jRepo.GetValue("html_url").ToString(),
+                        RepoId = jRepo.GetValue("id").ToString(),
+                        RepoDescription = jRepo.GetValue("description").ToString(),
+                        Stars = int.Parse(jRepo.GetValue("stargazers_count").ToString()),
+                        Forks = int.Parse(jRepo.GetValue("forks").ToString()),
+                        Watchs = int.Parse(jRepo.GetValue("watchers_count").ToString()),
+                        PositionInTop = position,
+                        QueryDate = DateTime.Today
+                    };
+
+                    list.Add(repoStats);
                 }
 
+                Console.WriteLine(" Done.");
             }
 
+            Console.WriteLine($"Getting stats done. Total items: {list.Count}");
 
             return list;
+        }
+
+        public static string GetPath()
+        {
+            var codeBase = Assembly.GetExecutingAssembly().CodeBase;
+            var uri = new UriBuilder(codeBase);
+            var path = Uri.UnescapeDataString(uri.Path);
+            return Path.GetDirectoryName(path);
         }
     }
 }

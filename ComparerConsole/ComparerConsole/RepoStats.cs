@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 
 namespace ComparerConsole
 {
@@ -8,13 +7,13 @@ namespace ComparerConsole
         public DateTime QueryDate;
 
         public string RepoUrl;
-        public int RepoId;
+        public string RepoId;
+        public string RepoDescription;
+
+        public int PositionInTop;
 
         public int Stars;
         public int Forks;
         public int Watchs;
-
-        public string RepoOwner => RepoUrl.Split(Convert.ToChar("/")).Reverse().Skip(1).First();
-        public string RepoName => RepoUrl.Split(Convert.ToChar("/")).Reverse().First();
     }
 }
