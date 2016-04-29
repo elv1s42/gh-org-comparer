@@ -1,1 +1,1 @@
-# gh-org-comparer
+# gh-comparer
