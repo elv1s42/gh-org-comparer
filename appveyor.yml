@@ -1,0 +1,14 @@
+-
+  branches:
+    only:
+    - master
+
+  before_build:
+    - nuget restore ComparerConsole/ComparerConsole.sln
+
+  build_script: 
+    - msbuild ComparerConsole/ComparerConsole.sln /p:Configuration=Release /t:Rebuild
+  
+  test:
+    assemblies:
+      - '**\*Tests.dll'
